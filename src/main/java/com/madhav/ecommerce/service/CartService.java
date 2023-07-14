@@ -1,16 +1,8 @@
 package com.madhav.ecommerce.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import com.madhav.ecommerce.repository.CartRepository;
-
+@Service
 public class CartService {
 	
-	@Autowired
-	private CartRepository repo;
-
-	public void addProductToCart(Integer productID) {
-		// TODO Auto-generated method stub
-		
-	}
 }

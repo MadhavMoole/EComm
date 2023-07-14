@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Welcome to ecommerce page</title>
+<title>Welcome to E-commerce page</title>
 </head>
 <body>
+<form action="#" th:action="@{/seedstartermng}" th:object="${seedStarter}" method="post">
+    ...
+</form>
  Hello!
 </body>
 </html>

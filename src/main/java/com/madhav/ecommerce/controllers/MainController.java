@@ -1,5 +1,6 @@
 package com.madhav.ecommerce.controllers;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.madhav.ecommerce.entities.Cart;
 import com.madhav.ecommerce.entities.Product;
 import com.madhav.ecommerce.entities.User;
 import com.madhav.ecommerce.service.CartService;
@@ -62,8 +64,9 @@ public class MainController {
 	}
 	
 	@GetMapping("/register")
-	public String register(@ModelAttribute("user")User user) {
-		
+	public String register(@ModelAttribute("user") User user) {
+		String password = user.getPassword();
+		user.setPassword(encoder.encode(password));
 		userService.register(user);
 		return "redirect:/mainPage";
 	}
@@ -75,8 +78,24 @@ public class MainController {
 		return "product-page";
 	}	
 	
-	@PostMapping("addToCart")
-	public String addToCart(Integer ProductID) {
-		return "redirect:/displayProduct";
+	@PostMapping("/addToCart")
+	public String addToCart(Integer productId, Principal principal) {
+		User user = userService.getUserByUserName(principal.getName());
+		Cart cartItems = cartService.getCartByCustomer(user);
+		cartService.addProductToCart(cartItems, productId);
+		return "redirect:/cart";
+	}
+	
+	@PostMapping("/deleteProductFromCart")
+	public String deleteFromCart(Integer ProductID) {
+		return "redirect:/cart";
+	}
+	
+	@GetMapping("/cart")
+	public String getCart(Model model, Principal principal) {
+		User user = userService.getUserByUserName(principal.getName());
+		Cart cartItems = cartService.getCartByCustomer(user);
+		model.addAttribute("cart", cartItems);
+		return "cart";
 	}
 }

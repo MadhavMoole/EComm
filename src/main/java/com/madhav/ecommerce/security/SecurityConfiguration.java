@@ -1,5 +1,7 @@
 package com.madhav.ecommerce.security;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -32,14 +34,14 @@ public class SecurityConfiguration {
 	}
 	
 	@Bean
-	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+	SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 		http.authorizeHttpRequests(
 				(auth) -> auth
-				.requestMatchers("/","/register").permitAll()
 				.requestMatchers("/mainPage").hasRole("USER")
 				.requestMatchers("/admin").hasRole("ADMIN")
-				.anyRequest().authenticated()
-				);
+				.anyRequest().permitAll()
+				).formLogin(withDefaults());
 		return http.build();
 	}
+	
 }
